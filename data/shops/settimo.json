@@ -1,0 +1,150 @@
+[
+  {
+    "id": "il-forno-di-gigi-via-d-adda",
+    "nome": "Il Forno di Gigi",
+    "categoria": "Alimentari",
+    "indirizzo": "Via Carlo D'Adda, 3, 20019 Settimo Milanese (MI)",
+    "orari": "Vedi in negozio",
+    "telefono": "+39023281285",
+    "email": "",
+    "descrizione": "Panificio artigianale: pane, focacce e dolci.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "gigi-01", "nome": "Pagnotta casereccia", "prezzo": 2.80, "unita": "500 g" },
+      { "id": "gigi-02", "nome": "Focaccia al rosmarino", "prezzo": 3.20, "unita": "300 g" }
+    ]
+  },
+  {
+    "id": "panificio-samuel2",
+    "nome": "Panificio Samuel 2",
+    "categoria": "Alimentari",
+    "indirizzo": "Via Giosuè Carducci, 16, 20019 Settimo Milanese (MI)",
+    "orari": "Vedi in negozio",
+    "telefono": "+390268858864",
+    "email": "",
+    "descrizione": "Pane e prodotti da forno freschi ogni giorno.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "sam-01", "nome": "Pane tipo 1", "prezzo": 2.50, "unita": "500 g" },
+      { "id": "sam-02", "nome": "Brioches", "prezzo": 1.30, "unita": "pezzo" }
+    ]
+  },
+  {
+    "id": "centrale-bar-caffetteria",
+    "nome": "Centrale Bar Caffetteria",
+    "categoria": "Bar & Caffè",
+    "indirizzo": "Piazza della Resistenza, 2 (Cascine Olona), 20019 Settimo Milanese (MI)",
+    "orari": "Vedi in negozio",
+    "telefono": "+390233514139",
+    "email": "",
+    "descrizione": "Caffetteria di quartiere, colazioni e pause pranzo.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "cbc-01", "nome": "Espresso", "prezzo": 1.10, "unita": "tazza" },
+      { "id": "cbc-02", "nome": "Cappuccino", "prezzo": 1.60, "unita": "tazza" }
+    ]
+  },
+  {
+    "id": "bar-tabacchi-la-capanna",
+    "nome": "Bar Tabacchi La Capanna",
+    "categoria": "Bar & Caffè",
+    "indirizzo": "Via Barni, 1 (Seguro), 20019 Settimo Milanese (MI)",
+    "orari": "Vedi in negozio",
+    "telefono": "+39023284881",
+    "email": "lacapanna.magrini@libero.it",
+    "descrizione": "Bar di quartiere con tabacchi e cucina semplice.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "cap-01", "nome": "Panino farcito", "prezzo": 4.50, "unita": "pezzo" },
+      { "id": "cap-02", "nome": "Aperitivo", "prezzo": 6.00, "unita": "calice" }
+    ]
+  },
+  {
+    "id": "chocolat-caffetteria",
+    "nome": "Chocolat",
+    "categoria": "Bar & Caffè",
+    "indirizzo": "Largo Papa Giovanni XXIII, 6, 20019 Settimo Milanese (MI)",
+    "orari": "08:00–20:00",
+    "telefono": "+390233599814",
+    "email": "chocolat.settimo@hotmail.com",
+    "descrizione": "Caffetteria, pasticceria e gelateria artigianale.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "cho-01", "nome": "Cornetto alla crema", "prezzo": 1.50, "unita": "pezzo" },
+      { "id": "cho-02", "nome": "Gelato al cioccolato", "prezzo": 2.50, "unita": "coppetta piccola" }
+    ]
+  },
+  {
+    "id": "la-caffetteria-centro-settimo",
+    "nome": "La Caffetteria (Centro Settimo)",
+    "categoria": "Bar & Caffè",
+    "indirizzo": "Via Reiss Romoli, 16, 20019 Settimo Milanese (MI)",
+    "orari": "Vedi in negozio",
+    "telefono": "+390233501515",
+    "email": "alberton@cheapnet.it",
+    "descrizione": "Bar caffetteria all’interno del Centro Settimo.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "lcs-01", "nome": "Caffè espresso", "prezzo": 1.10, "unita": "tazza" },
+      { "id": "lcs-02", "nome": "Brioches", "prezzo": 1.30, "unita": "pezzo" }
+    ]
+  },
+  {
+    "id": "centro-lavasecco",
+    "nome": "Centro Lavasecco – Servizio Rapido",
+    "categoria": "Casa & Servizi",
+    "indirizzo": "Piazza della Resistenza, 6, 20019 Settimo Milanese (MI)",
+    "orari": "Lun–Ven 08:00–19:30, Sab 08:00–13:00",
+    "telefono": "+390233500069",
+    "email": "",
+    "descrizione": "Lavanderia e sartoria con ritiro/riconsegna.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "lav-01", "nome": "Lavaggio camicia", "prezzo": 2.50, "unita": "pezzo" },
+      { "id": "lav-02", "nome": "Lavaggio piumone", "prezzo": 15.00, "unita": "pezzo" }
+    ]
+  },
+  {
+    "id": "lavanderia-bezzi",
+    "nome": "Lavanderia Bezzi",
+    "categoria": "Casa & Servizi",
+    "indirizzo": "Via Cadore, 1, 20019 Settimo Milanese (MI)",
+    "orari": "Vedi in negozio",
+    "telefono": "+39023284009",
+    "email": "",
+    "descrizione": "Lavanderia tradizionale e servizi tessili.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "bez-01", "nome": "Lavaggio pantaloni", "prezzo": 4.00, "unita": "pezzo" }
+    ]
+  },
+  {
+    "id": "parrucchiere-carlotta-maria",
+    "nome": "Parrucchiere Carlotta Maria",
+    "categoria": "Salute & Bellezza",
+    "indirizzo": "Via Libertà, 73, 20019 Settimo Milanese (MI)",
+    "orari": "Vedi in negozio",
+    "telefono": "+39023285636",
+    "email": "",
+    "descrizione": "Parrucchiera donna: taglio, colore e piega.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "cm-01", "nome": "Taglio + piega", "prezzo": 28.00, "unita": "servizio" }
+    ]
+  },
+  {
+    "id": "angel-elen-hair-style",
+    "nome": "Angel Elen Hair Style",
+    "categoria": "Salute & Bellezza",
+    "indirizzo": "Via Reiss Romoli, 16, 20019 Settimo Milanese (MI)",
+    "orari": "Lun–Sab 09:00–20:00, Dom 09:30–18:00",
+    "telefono": "+390233599870",
+    "email": "salonesettimo@gmail.com",
+    "descrizione": "Parrucchiere unisex in galleria commerciale.",
+    "whatsapp": "",
+    "prodotti": [
+      { "id": "ae-01", "nome": "Colore + piega", "prezzo": 45.00, "unita": "servizio" }
+    ]
+  }
+]
+
