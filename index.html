@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settimo Hub — Il quartiere in un’unica app</title>
+  <meta name="description" content="Trovi i negozi del tuo comune in un’unica app. Prenota su WhatsApp o passa in negozio: è a due passi da te." />
+  <meta name="theme-color" content="#111827" />
+  <!-- TailwindCSS via CDN (MVP) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-800">
+  <!-- Top bar -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#/" class="flex items-center gap-2 font-semibold text-slate-900" aria-label="Home">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-600 text-white font-bold">7</span>
+        <span class="tracking-tight">Settimo Hub</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#categorie" class="hover:text-emerald-700">Categorie</a>
+        <a href="#negozi" class="hover:text-emerald-700">Negozi</a>
+        <a href="#come-funziona" class="hover:text-emerald-700">Come funziona</a>
+        <a href="#aggiungi-negozio" class="px-3 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700">Aggiungi il tuo negozio</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== HOME VIEW ===== -->
+  <main id="homeView">
+    <!-- Hero -->
+    <section class="relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <h1 class="text-3xl md:text-5xl font-semibold tracking-tight text-slate-900">Il tuo quartiere, in un’unica app.</h1>
+          <p class="mt-4 text-slate-600 text-lg">Scopri e supporta i negozi del tuo comune. Prenota su WhatsApp o passa in negozio.</p>
+
+          <!-- Location + search -->
+          <div class="mt-6 p-3 md:p-4 card">
+            <div class="flex flex-col md:flex-row gap-3 md:items-center">
+              <div class="flex items-center gap-2">
+                <span class="chip">Comune</span>
+                <select id="selComune" class="rounded-lg border-slate-300 focus:ring-emerald-600 focus:border-emerald-600 text-sm"></select>
+              </div>
+              <div class="flex-1">
+                <label class="sr-only" for="txtSearch">Cerca negozio o prodotto</label>
+                <input id="txtSearch" type="search" placeholder="Cerca negozio o prodotto…" class="w-full rounded-lg border-slate-300 focus:ring-emerald-600 focus:border-emerald-600 text-sm px-3 py-2"/>
+              </div>
+              <div class="flex gap-2">
+                <button id="btnCerca" class="btn btn-primary">Cerca</button>
+                <button id="btnReset" class="btn btn-ghost">Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 flex flex-wrap gap-2 text-xs">
+            <span class="chip">Vetrina locale</span>
+            <span class="chip">Nessuna commissione</span>
+            <span class="chip">Contatto diretto WhatsApp</span>
+          </div>
+        </div>
+
+        <!-- Visual -->
+        <div class="relative">
+          <div class="card p-6 md:p-8">
+            <h2 class="text-lg font-semibold">Accedi dal QR del quartiere</h2>
+            <p class="text-sm text-slate-600 mt-1">Salva l’app tra i preferiti.</p>
+            <div class="mt-4 grid grid-cols-2 gap-4 items-center">
+              <div class="aspect-square rounded-xl border border-slate-300 p-3 flex items-center justify-center">
+                <img src="assets/img/qr-placeholder.svg" alt="QR code" class="w-full h-full object-contain"/>
+              </div>
+              <div class="text-sm">
+                <p class="font-medium">Settimo Hub</p>
+                <p class="text-slate-600">Tutti i negozi del tuo comune in un’unica app.</p>
+                <div class="mt-3 flex gap-2">
+                  <a href="#aggiungi-negozio" class="btn bg-slate-900 text-white text-xs">Sei un negozio?</a>
+                  <a href="#come-funziona" class="btn btn-ghost text-xs">Come funziona</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categorie -->
+    <section id="categorie" class="py-10 md:py-14 border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between">
+          <h2 class="text-xl md:text-2xl font-semibold">Categorie popolari</h2>
+          <button id="btnVediTutte" class="text-sm link">Vedi tutte</button>
+        </div>
+        <div id="catGrid" class="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4"></div>
+      </div>
+    </section>
+
+    <!-- Negozi -->
+    <section id="negozi" class="py-10 md:py-14">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between">
+          <h2 class="text-xl md:text-2xl font-semibold">Negozi del quartiere</h2>
+          <a href="shops.html" class="text-sm link">Vedi tutti</a>
+        </div>
+        <div id="shopsGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+      </div>
+    </section>
+
+    <!-- Come funziona -->
+    <section id="come-funziona" class="py-12 md:py-16 bg-white border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-xl md:text-2xl font-semibold">Come funziona</h2>
+        <div class="mt-6 grid md:grid-cols-3 gap-5">
+          <div class="card p-5"><div class="text-2xl">📍</div><h3 class="font-semibold mt-2">Scegli il tuo comune</h3><p class="text-sm text-slate-600">Partiamo da Settimo Milanese.</p></div>
+          <div class="card p-5"><div class="text-2xl">🛍️</div><h3 class="font-semibold mt-2">Scopri i negozi</h3><p class="text-sm text-slate-600">Vetrina chiara e contatto diretto.</p></div>
+          <div class="card p-5"><div class="text-2xl">💬</div><h3 class="font-semibold mt-2">Contatta su WhatsApp</h3><p class="text-sm text-slate-600">Prenota o chiedi info al negozio.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA negozi -->
+    <section id="aggiungi-negozio" class="py-12 md:py-16">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="card p-6 md:p-8">
+          <div class="md:flex md:items-center md:justify-between gap-6">
+            <div>
+              <h2 class="text-xl md:text-2xl font-semibold">Hai un negozio a Settimo?</h2>
+              <p class="text-sm text-slate-600 mt-1">Entrare è gratuito. Visibilità extra con pacchetti da 20€/mese.</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-2">
+              <a href="mailto:info@settimo-hub.example" class="btn btn-primary">Richiedi l’accesso</a>
+              <a href="docs/onboarding-negozi.md" class="btn btn-ghost" target="_blank">Guida onboarding</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== SHOP VIEW ===== -->
+  <main id="shopView" class="hidden-el">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <nav class="text-sm text-slate-600 mb-4">
+        <a href="#/" class="link">Home</a> ▸ <span id="bcComune"></span> ▸ <span id="bcShop"></span>
+      </nav>
+      <div class="grid lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 card p-6">
+          <div class="flex items-start gap-4">
+            <div class="h-24 w-24 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-50 border"></div>
+            <div>
+              <h1 id="shopTitle" class="text-2xl font-semibold"></h1>
+              <p id="shopDesc" class="text-sm text-slate-600 mt-1"></p>
+              <div class="mt-2 text-sm text-slate-700">
+                <p><strong>Indirizzo:</strong> <span id="shopAddr"></span></p>
+                <p><strong>Orari:</strong> <span id="shopHours"></span></p>
+              </div>
+              <div class="mt-3 flex gap-2">
+                <a id="shopWhatsapp" target="_blank" rel="noopener" class="btn btn-primary">Contatta su WhatsApp</a>
+                <a id="shopNavigate" target="_blank" class="btn btn-ghost">Apri in Maps</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <aside class="card p-6">
+          <p class="font-semibold">Contatti</p>
+          <p class="text-sm text-slate-600 mt-1">Telefono: <span id="shopPhone"></span></p>
+          <p class="text-sm text-slate-600">Email: <span id="shopEmail"></span></p>
+          <p class="text-sm text-slate-600">Categoria: <span id="shopCat" class="chip"></span></p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <h2 class="text-xl md:text-2xl font-semibold">Prodotti / Servizi</h2>
+      <div id="prodGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-xs text-slate-500">
+      © <span id="year"></span> Settimo Hub — Progetto per il quartiere
+    </div>
+  </footer>
+
+  <script src="assets/js/render.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
