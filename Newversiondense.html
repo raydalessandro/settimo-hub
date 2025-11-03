@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settimo Hub - Dense Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #1a4d2e;
+            --primary-medium: #2d6a4f;
+            --primary-light: #52b788;
+            --primary-bg: #d8f3dc;
+            --accent: #ff6b35;
+            --accent-light: #ff9770;
+            --bg: #fafdfb;
+            --card-bg: #FFFFFF;
+            --text: #0a0f0d;
+            --text-medium: #3d5a4c;
+            --text-light: #6b8078;
+            --border: #d7e5dd;
+            --shadow-sm: 0 2px 8px rgba(26, 77, 46, 0.06);
+            --shadow-md: 0 4px 16px rgba(26, 77, 46, 0.08);
+            --shadow-lg: 0 8px 32px rgba(26, 77, 46, 0.12);
+            --success: #40916c;
+            --warning: #ffd166;
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding-bottom: 75px;
+            overflow-x: hidden;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Top Bar - Più compatto */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logo-svg {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .icon-svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            font-size: 15px;
+            background: var(--bg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(26, 77, 46, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        /* Quick Filters - Più compatto */
+        .quick-filters {
+            display: flex;
+            gap: 6px;
+            padding: 8px 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .quick-filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            border: 2px solid var(--border);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-chip:active {
+            transform: scale(0.95);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(26, 77, 46, 0.25);
+        }
+
+        /* Section - Spacing ridotto */
+        .section {
+            padding: 0 16px 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            color: var(--text);
+        }
+
+        .see-all {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        /* Hero - Compatto ma d'impatto */
+        .hero {
+            background: linear-gradient(135deg, #0f2920 0%, #1a4d2e 40%, #2d6a4f 100%);
+            color: white;
+            padding: 40px 20px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, -20px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.85;
+            margin-bottom: 12px;
+            color: var(--primary-light);
+        }
+
+        .hero-title {
+            font-size: 36px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 14px;
+            letter-spacing: -1.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 15px;
+            opacity: 0.95;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .hero-tagline {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: 600;
+            color: var(--primary-light);
+        }
+
+        /* Stats - 3 colonne compatte */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 28px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            opacity: 0.9;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .stat-bar {
+            height: 3px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fff, var(--primary-light));
+            border-radius: 2px;
+        }
+
+        /* Categories - Grid 2x2 */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .category-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 18px 10px;
+            background: white;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .category-item:active {
+            transform: scale(0.95);
+        }
+
+        .category-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .category-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.2px;
+            margin-bottom: 2px;
+        }
+
+        .category-count {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Cards Grid - 2 colonne invece di scroll */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .business-card {
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .business-card:active {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+            background-size: 200% 200%;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--accent);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            color: var(--text);
+            letter-spacing: -0.2px;
+            line-height: 1.2;
+        }
+
+        .card-category {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .card-distance {
+            font-size: 11px;
+            color: var(--primary-medium);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Business List - Compatto */
+        .business-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .business-card-v {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 14px;
+            border: 2px solid var(--border);
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .business-card-v:active {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-icon-v {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .meta-item {
+            font-size: 11px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Location Banner - Compatto */
+        .location-banner {
+            background: var(--primary-bg);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .location-icon {
+            font-size: 18px;
+        }
+
+        .location-text {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .change-location {
+            font-size: 12px;
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Info Box - Compatto */
+        .info-box {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 14px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-box-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .info-box-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 19px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .info-box-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .info-box-subtitle {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        .info-box-text {
+            font-size: 12px;
+            color: var(--text);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .stats-mini-grid {
+            display: flex;
+            gap: 6px;
+        }
+
+        .stat-mini {
+            flex: 1;
+            background: var(--primary-bg);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-mini-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-mini-label {
+            font-size: 9px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        /* Bottom Navigation - Compatto */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+            z-index: 100;
+            box-shadow: 0 -4px 24px rgba(0,0,0,0.04);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 6px 16px;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            background: none;
+            flex: 1;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 0 0 3px 3px;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item.active::before {
+            width: 50%;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        /* FAB - Compatto */
+        .fab {
+            position: fixed;
+            bottom: 85px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-medium));
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(26, 77, 46, 0.3);
+            z-index: 99;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fab:active {
+            transform: scale(0.9);
+        }
+
+        /* Promo Box */
+        .promo-box {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-md);
+            padding: 18px;
+            text-align: center;
+            color: white;
+        }
+
+        .promo-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .promo-text {
+            font-size: 12px;
+            opacity: 0.95;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .promo-btn {
+            background: white;
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- SVG Icons -->
+    <svg style="display: none;">
+        <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+        </symbol>
+        <symbol id="icon-location" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+        </symbol>
+        <symbol id="icon-home" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </symbol>
+        <symbol id="icon-category" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+        </symbol>
+        <symbol id="icon-heart" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </symbol>
+        <symbol id="icon-news" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+        </symbol>
+    </svg>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g filter="drop-shadow(0 2px 4px rgba(26, 77, 46, 0.15))">
+                        <path d="M35 25 Q30 30 30 40 Q30 45 35 50 Q40 45 40 40 Q40 30 35 25 Z" fill="#1a4d2e"/>
+                        <path d="M55 20 Q60 25 60 35 Q60 40 55 45 Q50 40 50 35 Q50 25 55 20 Z" fill="#2d6a4f"/>
+                        <path d="M30 50 Q25 55 25 65 Q25 70 30 75 Q35 70 35 65 Q35 55 30 50 Z" fill="#52b788"/>
+                        <path d="M45 45 Q45 60 45 75" stroke="#1a4d2e" stroke-width="3.5" stroke-linecap="round"/>
+                    </g>
+                </svg>
+                <div>
+                    <div style="font-size: 16px; font-weight: 900; color: var(--primary); letter-spacing: -0.5px; line-height: 1.1;">Settimo Hub</div>
+                    <div style="font-size: 9px; color: var(--text-light); line-height: 1; font-weight: 600; letter-spacing: 0.3px;">DENSE MOBILE</div>
+                </div>
+            </div>
+        </div>
+        <div class="search-bar">
+            <svg class="search-icon icon-svg">
+                <use href="#icon-search"/>
+            </svg>
+            <input type="text" class="search-input" placeholder="Cerca negozi, ristoranti..."/>
+        </div>
+    </div>
+
+    <!-- Quick Filters -->
+    <div class="quick-filters">
+        <button class="filter-chip active">Tutti</button>
+        <button class="filter-chip">🍝 Ristoranti</button>
+        <button class="filter-chip">💇 Servizi</button>
+        <button class="filter-chip">🛍️ Negozi</button>
+        <button class="filter-chip">🥖 Alimentari</button>
+    </div>
+
+    <!-- Hero - Compatto -->
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-label">Settimo Milanese</div>
+            <h1 class="hero-title">Il commercio locale<br>che merita di esistere</h1>
+            <p class="hero-subtitle">Scopri, supporta e connettiti con le attività indipendenti del tuo quartiere.</p>
+            <p class="hero-tagline">Zero catene. Solo persone vere.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">191</div>
+                    <div class="stat-label">Attività locali</div>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" style="color: #ff6b6b;">0</div>
+                    <div class="stat-label">Catene</div>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width: 0%; background: #ff6b6b;"></div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100<span style="font-size: 26px;">%</span></div>
+                    <div class="stat-label">Indipendente</div>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width: 100%; background: #4ade80;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location -->
+    <div class="location-banner">
+        <span class="location-icon">📍</span>
+        <span class="location-text">Settimo Milanese Centro</span>
+        <span class="change-location">Cambia</span>
+    </div>
+
+    <!-- Categories -->
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">Esplora per categoria</h2>
+        </div>
+        <div class="categories-grid">
+            <div class="category-item">
+                <div class="category-icon">🍝</div>
+                <div class="category-name">Ristoranti</div>
+                <div class="category-count">47 locali</div>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">💇</div>
+                <div class="category-name">Servizi</div>
+                <div class="category-count">84 attività</div>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">🛍️</div>
+                <div class="category-name">Negozi</div>
+                <div class="category-count">32 shop</div>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">🥖</div>
+                <div class="category-name">Alimentari</div>
+                <div class="category-count">28 botteghe</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Near You - Grid 2x2 -->
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">📍 Vicino a te</h2>
+            <span class="see-all">Vedi tutti →</span>
+        </div>
+        <div class="cards-grid">
+            <div class="business-card">
+                <div class="card-image" style="background: linear-gradient(135deg, #f4a261 0%, #e76f51 100%);">
+                    <div style="font-size: 52px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">🥖</div>
+                    <span class="premium-badge">PREMIUM</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Il Forno di Gigi</div>
+                    <div class="card-category">Dal 1932 · Panetteria</div>
+                    <div class="card-distance">
+                        <svg style="width: 12px; height: 12px;"><use href="#icon-location"/></svg>
+                        350m
+                    </div>
+                </div>
+            </div>
+            <div class="business-card">
+                <div class="card-image" style="background: linear-gradient(135deg, #e63946 0%, #d62828 100%);">
+                    <div style="font-size: 52px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">🍕</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Pizzeria da Marco</div>
+                    <div class="card-category">Pizza napoletana</div>
+                    <div class="card-distance">
+                        <svg style="width: 12px; height: 12px;"><use href="#icon-location"/></svg>
+                        420m
+                    </div>
+                </div>
+            </div>
+            <div class="business-card">
+                <div class="card-image" style="background: linear-gradient(135deg, #c77dff 0%, #9d4edd 100%);">
+                    <div style="font-size: 52px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">💇</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Romano Parrucchieri</div>
+                    <div class="card-category">Salone uomo/donna</div>
+                    <div class="card-distance" style="color: var(--text-light);">
+                        <svg style="width: 12px; height: 12px;"><use href="#icon-location"/></svg>
+                        580m
+                    </div>
+                </div>
+            </div>
+            <div class="business-card">
+                <div class="card-image" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+                    <div style="font-size: 52px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">🍦</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Gelateria Gioia</div>
+                    <div class="card-category">Gelato artigianale</div>
+                    <div class="card-distance">
+                        <svg style="width: 12px; height: 12px;"><use href="#icon-location"/></svg>
+                        720m
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Box -->
+    <div class="section">
+        <div class="info-box">
+            <div class="info-box-header">
+                <div class="info-box-icon">💚</div>
+                <div style="flex: 1;">
+                    <div class="info-box-title">Perché comprare locale?</div>
+                    <div class="info-box-subtitle">Il tuo impatto sul quartiere</div>
+                </div>
+            </div>
+            <div class="info-box-text">
+                Ogni euro speso in un negozio locale genera <strong>3x più valore</strong> per Settimo Milanese rispetto alle catene nazionali.
+            </div>
+            <div class="stats-mini-grid">
+                <div class="stat-mini">
+                    <div class="stat-mini-number">68%</div>
+                    <div class="stat-mini-label">Resta qui</div>
+                </div>
+                <div class="stat-mini" style="background: #FFF3E0;">
+                    <div class="stat-mini-number" style="color: #F57C00;">10%</div>
+                    <div class="stat-mini-label">Con catene</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popular - List compatta -->
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">⭐ Più cercati</h2>
+            <span class="see-all">Vedi tutti →</span>
+        </div>
+        <div class="business-list">
+            <div class="business-card-v">
+                <div class="card-icon-v">🥖</div>
+                <div class="card-info">
+                    <div class="card-title">Il Forno di Gigi</div>
+                    <div class="card-category">Dal 1932 · Panetteria</div>
+                    <div class="card-meta">
+                        <span class="meta-item">📍 350m</span>
+                        <span class="meta-item">⭐ Premium</span>
+                    </div>
+                </div>
+            </div>
+            <div class="business-card-v">
+                <div class="card-icon-v">🔧</div>
+                <div class="card-info">
+                    <div class="card-title">Ferramenta Magrefer</div>
+                    <div class="card-category">Ferramenta</div>
+                    <div class="card-meta">
+                        <span class="meta-item">📍 1.2km</span>
+                        <span class="meta-item">⭐ Premium</span>
+                    </div>
+                </div>
+            </div>
+            <div class="business-card-v">
+                <div class="card-icon-v">💍</div>
+                <div class="card-info">
+                    <div class="card-title">Sbarbori Gioielli</div>
+                    <div class="card-category">Oltre 50 anni · Gioielleria</div>
+                    <div class="card-meta">
+                        <span class="meta-item">📍 800m</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Box -->
+    <div class="section">
+        <div class="promo-box">
+            <div class="promo-title">Hai un negozio?</div>
+            <div class="promo-text">
+                Entra gratis su Settimo Hub.<br>Fatti trovare dai tuoi clienti.
+            </div>
+            <button class="promo-btn">Scopri di più →</button>
+        </div>
+    </div>
+
+    <!-- FAB -->
+    <button class="fab">🗺️</button>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-item active">
+            <svg class="icon-svg">
+                <use href="#icon-home"/>
+            </svg>
+            <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item">
+            <svg class="icon-svg">
+                <use href="#icon-category"/>
+            </svg>
+            <span class="nav-label">Categorie</span>
+        </button>
+        <button class="nav-item">
+            <svg class="icon-svg">
+                <use href="#icon-heart"/>
+            </svg>
+            <span class="nav-label">Preferiti</span>
+        </button>
+        <button class="nav-item">
+            <svg class="icon-svg">
+                <use href="#icon-news"/>
+            </svg>
+            <span class="nav-label">Blog</span>
+        </button>
+    </div>
+</body>
+</html>
