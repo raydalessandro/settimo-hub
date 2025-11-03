@@ -51,6 +51,29 @@
             flex-shrink: 0;
         }
 
+        /* Icon System - Modern SVG Icons */
+        .icon-svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .icon-lg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .icon-xl {
+            width: 64px;
+            height: 64px;
+        }
+
+        .category-icon-svg {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 8px;
+        }
+
         .search-bar {
             position: relative;
             width: 100%;
@@ -355,7 +378,8 @@
         }
 
         .nav-icon {
-            font-size: 24px;
+            width: 24px;
+            height: 24px;
         }
 
         .nav-label {
@@ -492,9 +516,176 @@
         /* Responsive */
         @media (min-width: 768px) {
             body {
-                max-width: 480px;
+                max-width: 100%;
                 margin: 0 auto;
-                box-shadow: 0 0 24px rgba(0,0,0,0.1);
+            }
+
+            .container-wrapper {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 40px;
+            }
+
+            /* Top Bar Desktop */
+            .top-bar {
+                padding: 16px 40px;
+            }
+
+            /* Hero Desktop */
+            .hero {
+                padding: 48px 40px;
+                margin-bottom: 32px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+            }
+
+            /* Quick Filters Desktop */
+            .quick-filters {
+                padding: 16px 40px;
+                justify-content: center;
+            }
+
+            /* Sections Desktop */
+            .section {
+                padding: 0 40px 32px;
+            }
+
+            /* Categories Grid Desktop */
+            .categories-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+
+            .category-item {
+                padding: 24px 16px;
+            }
+
+            .category-icon-svg {
+                width: 56px;
+                height: 56px;
+            }
+
+            /* Business Cards Grid Desktop */
+            .businesses-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 24px;
+            }
+
+            /* Horizontal Scroll becomes Grid on Desktop */
+            .cards-scroll {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                overflow-x: visible;
+            }
+
+            .business-card-h {
+                min-width: auto;
+            }
+
+            /* Business List 2 columns on desktop */
+            .business-list {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            /* Stats cards bigger on desktop */
+            .stats-grid {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            /* Location banner centered */
+            .location-banner {
+                max-width: 800px;
+                margin: 0 auto 24px;
+            }
+
+            /* Bottom nav hidden on desktop, add top nav instead */
+            .bottom-nav {
+                display: none;
+            }
+
+            body {
+                padding-bottom: 0;
+            }
+
+            /* Desktop Top Navigation */
+            .desktop-nav {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+
+            .desktop-nav-item {
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-medium);
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .desktop-nav-item:hover {
+                background: var(--primary-bg);
+                color: var(--primary);
+            }
+
+            .desktop-nav-item.active {
+                background: var(--primary);
+                color: white;
+            }
+
+            .desktop-nav-item svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            /* FAB hidden on desktop */
+            .fab {
+                display: none;
+            }
+
+            /* Search bar bigger on desktop */
+            .search-input {
+                font-size: 15px;
+                padding: 12px 16px 12px 44px;
+            }
+
+            .search-icon {
+                left: 16px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            /* Even more space on large screens */
+            .cards-scroll,
+            .businesses-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .business-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Mobile only styles */
+        @media (max-width: 767px) {
+            .desktop-nav {
+                display: none;
             }
         }
 
@@ -504,6 +695,83 @@
     </style>
 </head>
 <body>
+    <!-- SVG Icon Library (Hidden) -->
+    <svg style="display: none;">
+        <!-- Search Icon -->
+        <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+        </symbol>
+        
+        <!-- Location Icon -->
+        <symbol id="icon-location" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+        </symbol>
+        
+        <!-- Restaurant Icon -->
+        <symbol id="icon-restaurant" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/>
+        </symbol>
+        
+        <!-- Services/Scissors Icon -->
+        <symbol id="icon-scissors" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9.64 7.64c.23-.5.36-1.05.36-1.64 0-2.21-1.79-4-4-4S2 3.79 2 6s1.79 4 4 4c.59 0 1.14-.13 1.64-.36L10 12l-2.36 2.36C7.14 14.13 6.59 14 6 14c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4c0-.59-.13-1.14-.36-1.64L12 14l7 7h3v-1L9.64 7.64zM6 8c-1.1 0-2-.89-2-2s.9-2 2-2 2 .89 2 2-.9 2-2 2zm0 12c-1.1 0-2-.89-2-2s.9-2 2-2 2 .89 2 2-.9 2-2 2zm6-7.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5.5.22.5.5-.22.5-.5.5zM19 3l-6 6 2 2 7-7V3z"/>
+        </symbol>
+        
+        <!-- Shopping Bag Icon -->
+        <symbol id="icon-shopping" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h12v12z"/>
+        </symbol>
+        
+        <!-- Bread/Food Icon -->
+        <symbol id="icon-bread" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2c-1.1 0-2 .9-2 2H8c0-1.1-.9-2-2-2H2v20h4c1.1 0 2-.9 2-2h8c0 1.1.9 2 2 2h4V2h-4zM6 20H4V4h2v16zm12 0h-2V4h2v16z"/>
+            <circle cx="9" cy="8" r="1.5"/>
+            <circle cx="15" cy="8" r="1.5"/>
+            <circle cx="12" cy="12" r="1.5"/>
+        </symbol>
+        
+        <!-- WhatsApp Icon -->
+        <symbol id="icon-whatsapp" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </symbol>
+        
+        <!-- Phone Icon -->
+        <symbol id="icon-phone" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </symbol>
+        
+        <!-- Star Icon -->
+        <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+        </symbol>
+        
+        <!-- Heart Icon -->
+        <symbol id="icon-heart" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </symbol>
+        
+        <!-- Home Icon -->
+        <symbol id="icon-home" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </symbol>
+        
+        <!-- Category/Folder Icon -->
+        <symbol id="icon-category" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+        </symbol>
+        
+        <!-- Blog/News Icon -->
+        <symbol id="icon-news" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+        </symbol>
+        
+        <!-- Link Icon -->
+        <symbol id="icon-link" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+        </symbol>
+    </svg>
+
     <!-- Top Bar -->
     <div class="top-bar">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
@@ -526,9 +794,31 @@
                     <div style="font-size: 10px; color: var(--text-light); line-height: 1;">Il tuo quartiere</div>
                 </div>
             </div>
+
+            <!-- Desktop Navigation (hidden on mobile) -->
+            <nav class="desktop-nav">
+                <button class="desktop-nav-item active" onclick="changePage('home')">
+                    <svg><use href="#icon-home"/></svg>
+                    Home
+                </button>
+                <button class="desktop-nav-item" onclick="changePage('categories')">
+                    <svg><use href="#icon-category"/></svg>
+                    Categorie
+                </button>
+                <button class="desktop-nav-item" onclick="changePage('links')">
+                    <svg><use href="#icon-link"/></svg>
+                    Link Utili
+                </button>
+                <button class="desktop-nav-item" onclick="changePage('blog')">
+                    <svg><use href="#icon-news"/></svg>
+                    Blog
+                </button>
+            </nav>
         </div>
         <div class="search-bar">
-            <span class="search-icon">🔍</span>
+            <svg class="search-icon icon-svg" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-light);">
+                <use href="#icon-search"/>
+            </svg>
             <input 
                 type="text" 
                 class="search-input" 
@@ -549,47 +839,125 @@
 
     <!-- HOME PAGE -->
     <div class="page active" id="homePage">
-        <!-- Hero -->
-        <div class="hero">
-            <div class="hero-title">Scopri il commercio locale</div>
-            <div class="hero-subtitle">191 attività indipendenti. Zero catene. Solo negozi veri di Settimo Milanese.</div>
-        </div>
-
-        <!-- Stats Cards -->
-        <div style="padding: 0 16px 20px;">
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px;">
-                <div style="background: white; border-radius: 12px; padding: 16px 12px; text-align: center; border: 1px solid var(--border);">
-                    <div style="font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1;">191</div>
-                    <div style="font-size: 11px; color: var(--text-light); margin-top: 4px; font-weight: 600;">Attività locali</div>
-                </div>
-                <div style="background: white; border-radius: 12px; padding: 16px 12px; text-align: center; border: 1px solid var(--border);">
-                    <div style="font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1;">0</div>
-                    <div style="font-size: 11px; color: var(--text-light); margin-top: 4px; font-weight: 600;">Catene</div>
-                </div>
-                <div style="background: white; border-radius: 12px; padding: 16px 12px; text-align: center; border: 1px solid var(--border);">
-                    <div style="font-size: 28px; font-weight: 800; color: var(--success); line-height: 1;">💚</div>
-                    <div style="font-size: 11px; color: var(--text-light); margin-top: 4px; font-weight: 600;">Gratis</div>
+        <!-- Hero - Professional Design -->
+        <div style="background: linear-gradient(135deg, #1a4d2e 0%, #2d5a3d 50%, #4a7c59 100%); color: white; padding: 56px 24px 48px; position: relative; overflow: hidden;">
+            <!-- Decorative circles background -->
+            <div style="position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.03);"></div>
+            <div style="position: absolute; bottom: -50px; left: -50px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.05);"></div>
+            
+            <div style="position: relative; z-index: 1; max-width: 800px; margin: 0 auto;">
+                <div style="font-size: 14px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; opacity: 0.9; margin-bottom: 16px;">Settimo Milanese</div>
+                <h1 style="font-size: 42px; font-weight: 800; line-height: 1.1; margin-bottom: 16px; letter-spacing: -1px;">Il commercio locale che merita di esistere</h1>
+                <p style="font-size: 16px; opacity: 0.95; line-height: 1.6; max-width: 500px;">Scopri, supporta e connettiti con le attività indipendenti del tuo quartiere. Zero catene, solo persone vere.</p>
+                
+                <!-- Decorative line -->
+                <div style="width: 60px; height: 3px; background: rgba(255,255,255,0.3); margin: 32px 0;"></div>
+                
+                <!-- Data Visualization -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px;">
+                    <div>
+                        <div style="font-size: 48px; font-weight: 800; line-height: 1; margin-bottom: 8px;">191</div>
+                        <div style="font-size: 13px; opacity: 0.85; font-weight: 500;">Attività locali</div>
+                        <div style="height: 3px; background: rgba(255,255,255,0.2); margin-top: 12px; border-radius: 2px;">
+                            <div style="height: 100%; background: white; width: 100%; border-radius: 2px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 48px; font-weight: 800; line-height: 1; margin-bottom: 8px; color: #ff6b6b;">0</div>
+                        <div style="font-size: 13px; opacity: 0.85; font-weight: 500;">Catene nazionali</div>
+                        <div style="height: 3px; background: rgba(255,255,255,0.2); margin-top: 12px; border-radius: 2px;">
+                            <div style="height: 100%; background: #ff6b6b; width: 0%; border-radius: 2px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 48px; font-weight: 800; line-height: 1; margin-bottom: 8px;">100<span style="font-size: 32px;">%</span></div>
+                        <div style="font-size: 13px; opacity: 0.85; font-weight: 500;">Indipendente</div>
+                        <div style="height: 3px; background: rgba(255,255,255,0.2); margin-top: 12px; border-radius: 2px;">
+                            <div style="height: 100%; background: #4ade80; width: 100%; border-radius: 2px;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Value Props - 3 Cards -->
-        <div style="padding: 0 16px 20px;">
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                <div style="text-align: center; padding: 16px 8px; background: white; border-radius: 12px; border: 1px solid var(--border);">
-                    <div style="font-size: 28px; margin-bottom: 6px;">📍</div>
-                    <div style="font-size: 12px; font-weight: 600; color: var(--text);">Tutto vicino</div>
-                    <div style="font-size: 10px; color: var(--text-light); margin-top: 2px;">A 10 minuti da te</div>
+        <!-- How It Works - Clean White Section -->
+        <div style="background: white; padding: 56px 24px; border-bottom: 1px solid var(--border);">
+            <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+                <h2 style="font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 12px;">Come funziona</h2>
+                <p style="font-size: 15px; color: var(--text-light); max-width: 500px; margin: 0 auto 48px;">Tre semplici passi per supportare il commercio locale</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;">
+                    <!-- Step 1 -->
+                    <div>
+                        <div style="width: 80px; height: 80px; margin: 0 auto 24px; background: linear-gradient(135deg, var(--primary-bg), white); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border);">
+                            <svg style="width: 40px; height: 40px; color: var(--primary);">
+                                <use href="#icon-search"/>
+                            </svg>
+                        </div>
+                        <h3 style="font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Cerca</h3>
+                        <p style="font-size: 14px; color: var(--text-light); line-height: 1.6;">Trova attività per categoria o località. Tutto vicino a te.</p>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div>
+                        <div style="width: 80px; height: 80px; margin: 0 auto 24px; background: linear-gradient(135deg, var(--primary-bg), white); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border);">
+                            <svg style="width: 40px; height: 40px; color: var(--primary);">
+                                <use href="#icon-location"/>
+                            </svg>
+                        </div>
+                        <h3 style="font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Scopri</h3>
+                        <p style="font-size: 14px; color: var(--text-light); line-height: 1.6;">Leggi le storie, vedi le foto, conosci chi c'è dietro.</p>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div>
+                        <div style="width: 80px; height: 80px; margin: 0 auto 24px; background: linear-gradient(135deg, var(--primary-bg), white); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border);">
+                            <svg style="width: 40px; height: 40px; color: var(--primary);">
+                                <use href="#icon-whatsapp"/>
+                            </svg>
+                        </div>
+                        <h3 style="font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Contatta</h3>
+                        <p style="font-size: 14px; color: var(--text-light); line-height: 1.6;">WhatsApp diretto o chiamata. Nessuna intermediazione.</p>
+                    </div>
                 </div>
-                <div style="text-align: center; padding: 16px 8px; background: white; border-radius: 12px; border: 1px solid var(--border);">
-                    <div style="font-size: 28px; margin-bottom: 6px;">💬</div>
-                    <div style="font-size: 12px; font-weight: 600; color: var(--text);">Contatto diretto</div>
-                    <div style="font-size: 10px; color: var(--text-light); margin-top: 2px;">WhatsApp veloce</div>
-                </div>
-                <div style="text-align: center; padding: 16px 8px; background: white; border-radius: 12px; border: 1px solid var(--border);">
-                    <div style="font-size: 28px; margin-bottom: 6px;">💚</div>
-                    <div style="font-size: 12px; font-weight: 600; color: var(--text);">100% locale</div>
-                    <div style="font-size: 10px; color: var(--text-light); margin-top: 2px;">Nessuna catena</div>
+            </div>
+        </div>
+
+        <!-- Impact Section - Visual Data -->
+        <div style="background: var(--bg); padding: 56px 24px;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); border: 1px solid var(--border);">
+                    <h2 style="font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 12px;">L'impatto della tua scelta</h2>
+                    <p style="font-size: 15px; color: var(--text-light); margin-bottom: 40px; line-height: 1.6;">Ogni euro speso in un negozio locale ha un effetto moltiplicatore sul territorio</p>
+                    
+                    <!-- Visual Comparison -->
+                    <div style="display: grid; gap: 24px;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: var(--text);">Negozio locale</span>
+                                <span style="font-size: 20px; font-weight: 700; color: var(--primary);">68%</span>
+                            </div>
+                            <div style="height: 12px; background: var(--border); border-radius: 6px; overflow: hidden;">
+                                <div style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); width: 68%; border-radius: 6px; transition: width 1s ease;"></div>
+                            </div>
+                            <p style="font-size: 12px; color: var(--text-light); margin-top: 8px;">Resta nel quartiere: stipendi, affitti, fornitori locali</p>
+                        </div>
+                        
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: var(--text);">Catena nazionale</span>
+                                <span style="font-size: 20px; font-weight: 700; color: #ff6b6b;">10%</span>
+                            </div>
+                            <div style="height: 12px; background: var(--border); border-radius: 6px; overflow: hidden;">
+                                <div style="height: 100%; background: #ff6b6b; width: 10%; border-radius: 6px; transition: width 1s ease;"></div>
+                            </div>
+                            <p style="font-size: 12px; color: var(--text-light); margin-top: 8px;">Profitti vanno alla sede centrale, spesso all'estero</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 32px; padding: 20px; background: var(--primary-bg); border-radius: 12px; border-left: 4px solid var(--primary);">
+                        <p style="font-size: 14px; color: var(--text); line-height: 1.6; margin: 0;"><strong>In pratica:</strong> Per ogni 100€ spesi localmente, 68€ vengono reinvestiti a Settimo Milanese. Con le catene, solo 10€.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -608,22 +976,30 @@
             </div>
             <div class="categories-grid">
                 <div class="category-item" onclick="navigateTo('categories', 'ristorazione')">
-                    <div class="category-icon">🍝</div>
+                    <svg class="category-icon-svg" style="color: var(--accent);">
+                        <use href="#icon-restaurant"/>
+                    </svg>
                     <div class="category-name">Ristoranti</div>
                     <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 2px;">47 locali</div>
                 </div>
                 <div class="category-item" onclick="navigateTo('categories', 'servizi')">
-                    <div class="category-icon">💇</div>
+                    <svg class="category-icon-svg" style="color: var(--primary);">
+                        <use href="#icon-scissors"/>
+                    </svg>
                     <div class="category-name">Servizi</div>
                     <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 2px;">84 attività</div>
                 </div>
                 <div class="category-item" onclick="navigateTo('categories', 'retail')">
-                    <div class="category-icon">🛍️</div>
+                    <svg class="category-icon-svg" style="color: #F57C00;">
+                        <use href="#icon-shopping"/>
+                    </svg>
                     <div class="category-name">Negozi</div>
                     <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 2px;">32 shop</div>
                 </div>
                 <div class="category-item" onclick="navigateTo('categories', 'alimentari')">
-                    <div class="category-icon">🥖</div>
+                    <svg class="category-icon-svg" style="color: #8D6E63;">
+                        <use href="#icon-bread"/>
+                    </svg>
                     <div class="category-name">Alimentari</div>
                     <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 2px;">28 botteghe</div>
                 </div>
@@ -1057,19 +1433,27 @@
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <button class="nav-item active" onclick="changePage('home')">
-            <span class="nav-icon">🏠</span>
+            <svg class="nav-icon icon-svg">
+                <use href="#icon-home"/>
+            </svg>
             <span class="nav-label">Home</span>
         </button>
         <button class="nav-item" onclick="changePage('categories')">
-            <span class="nav-icon">📁</span>
+            <svg class="nav-icon icon-svg">
+                <use href="#icon-category"/>
+            </svg>
             <span class="nav-label">Categorie</span>
         </button>
         <button class="nav-item" onclick="changePage('links')">
-            <span class="nav-icon">🔗</span>
+            <svg class="nav-icon icon-svg">
+                <use href="#icon-link"/>
+            </svg>
             <span class="nav-label">Link Utili</span>
         </button>
         <button class="nav-item" onclick="changePage('blog')">
-            <span class="nav-icon">📰</span>
+            <svg class="nav-icon icon-svg">
+                <use href="#icon-news"/>
+            </svg>
             <span class="nav-label">Blog</span>
         </button>
     </div>
@@ -1089,9 +1473,17 @@
             // Show selected page
             document.getElementById(page + 'Page').classList.add('active');
             
-            // Update nav items
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            // Update both nav items (mobile bottom + desktop top)
+            document.querySelectorAll('.nav-item, .desktop-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Find and activate the clicked nav item
             event.currentTarget.classList.add('active');
+            
+            // Also activate the corresponding nav in the other menu
+            const navItems = document.querySelectorAll(`[onclick="changePage('${page}')"]`);
+            navItems.forEach(item => item.classList.add('active'));
             
             // Scroll to top
             window.scrollTo(0, 0);
@@ -1137,4 +1529,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
