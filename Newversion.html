@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settimo Hub - Redesign 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #2d5a3d;
+            --primary-light: #7FB685;
+            --primary-bg: #E8F5E9;
+            --accent: #D84A3F;
+            --accent-light: #E57373;
+            --bg: #F8FAF9;
+            --card-bg: #FFFFFF;
+            --text: #1a1a1a;
+            --text-light: #666;
+            --border: #E0E8E5;
+            --success: #4CAF50;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 10px 16px;
+        }
+
+        /* Logo SVG */
+        .logo-svg {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            font-size: 14px;
+            background: var(--bg);
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 2px 12px rgba(72, 115, 76, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        /* Quick Filters */
+        .quick-filters {
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .quick-filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            border: 1.5px solid var(--border);
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Near You Section */
+        .section {
+            padding: 0 16px 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .see-all {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Business Cards - Horizontal Scroll */
+        .cards-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 4px 0;
+        }
+
+        .cards-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .business-card-h {
+            min-width: 280px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .business-card-h:active {
+            transform: scale(0.98);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--accent);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(216, 74, 63, 0.3);
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .card-category {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .card-distance {
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Categories Grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .category-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 16px 8px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .category-item:active {
+            transform: scale(0.95);
+            background: var(--primary-light);
+        }
+
+        .category-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .category-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* List View */
+        .business-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .business-card-v {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .business-card-v:active {
+            transform: scale(0.98);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .meta-item {
+            font-size: 12px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-whatsapp:active {
+            background: #20BA5A;
+        }
+
+        .btn-call {
+            background: white;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.2s;
+            border: none;
+            background: none;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(72, 115, 76, 0.3);
+            z-index: 99;
+            transition: transform 0.2s;
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+        }
+
+        /* Location Banner */
+        .location-banner {
+            background: var(--primary-bg);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .location-icon {
+            font-size: 20px;
+        }
+
+        .location-text {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .change-location {
+            font-size: 13px;
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 16px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Hero (only on home) */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 20px 16px;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .hero-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .hero-subtitle {
+            font-size: 13px;
+            opacity: 0.95;
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            body {
+                max-width: 480px;
+                margin: 0 auto;
+                box-shadow: 0 0 24px rgba(0,0,0,0.1);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <!-- Settimo Hub Logo SVG - Compact -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <!-- Leaf 1 (top left) -->
+                        <path d="M35 25 Q30 30 30 40 Q30 45 35 50 Q40 45 40 40 Q40 30 35 25 Z" fill="#2d5a3d"/>
+                        <!-- Leaf 2 (top right) -->
+                        <path d="M55 20 Q60 25 60 35 Q60 40 55 45 Q50 40 50 35 Q50 25 55 20 Z" fill="#3d6a4d"/>
+                        <!-- Leaf 3 (bottom left) -->
+                        <path d="M30 50 Q25 55 25 65 Q25 70 30 75 Q35 70 35 65 Q35 55 30 50 Z" fill="#4d7a5d"/>
+                        <!-- Stem -->
+                        <path d="M45 45 Q45 60 45 75" stroke="#2d5a3d" stroke-width="3" stroke-linecap="round"/>
+                    </g>
+                </svg>
+                <div>
+                    <div style="font-size: 16px; font-weight: 700; color: var(--primary); letter-spacing: -0.3px; line-height: 1.2;">Settimo Hub</div>
+                    <div style="font-size: 10px; color: var(--text-light); line-height: 1;">Il tuo quartiere</div>
+                </div>
+            </div>
+        </div>
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input 
+                type="text" 
+                class="search-input" 
+                placeholder="Cerca negozi, ristoranti..."
+                id="searchInput"
+            />
+        </div>
+    </div>
+
+    <!-- Quick Filters -->
+    <div class="quick-filters">
+        <button class="filter-chip active" data-category="all">🌟 Tutti</button>
+        <button class="filter-chip" data-category="ristorazione">🍝 Ristoranti</button>
+        <button class="filter-chip" data-category="servizi">💇 Servizi</button>
+        <button class="filter-chip" data-category="retail">🛍️ Negozi</button>
+        <button class="filter-chip" data-category="alimentari">🥖 Alimentari</button>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div class="page active" id="homePage">
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-title">Scopri il commercio locale</div>
+            <div class="hero-subtitle">191 attività indipendenti. Zero catene. Solo negozi veri di Settimo Milanese.</div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div style="padding: 0 16px 20px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px;">
+                <div style="background: white; border-radius: 12px; padding: 16px 12px; text-align: center; border: 1px solid var(--border);">
+                    <div style="font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1;">191</div>
+                    <div style="font-size: 11px; color: var(--text-light); margin-top: 4px; font-weight: 600;">Attività locali</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 16px 12px; text-align: center; border: 1px solid var(--border);">
+                    <div style="font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1;">0</div>
+                    <div style="font-size: 11px; color: var(--text-light); margin-top: 4px; font-weight: 600;">Catene</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 16px 12px; text-align: center; border: 1px solid var(--border);">
+                    <div style="font-size: 28px; font-weight: 800; color: var(--success); line-height: 1;">💚</div>
+                    <div style="font-size: 11px; color: var(--text-light); margin-top: 4px; font-weight: 600;">Gratis</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Value Props - 3 Cards -->
+        <div style="padding: 0 16px 20px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                <div style="text-align: center; padding: 16px 8px; background: white; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="font-size: 28px; margin-bottom: 6px;">📍</div>
+                    <div style="font-size: 12px; font-weight: 600; color: var(--text);">Tutto vicino</div>
+                    <div style="font-size: 10px; color: var(--text-light); margin-top: 2px;">A 10 minuti da te</div>
+                </div>
+                <div style="text-align: center; padding: 16px 8px; background: white; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="font-size: 28px; margin-bottom: 6px;">💬</div>
+                    <div style="font-size: 12px; font-weight: 600; color: var(--text);">Contatto diretto</div>
+                    <div style="font-size: 10px; color: var(--text-light); margin-top: 2px;">WhatsApp veloce</div>
+                </div>
+                <div style="text-align: center; padding: 16px 8px; background: white; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="font-size: 28px; margin-bottom: 6px;">💚</div>
+                    <div style="font-size: 12px; font-weight: 600; color: var(--text);">100% locale</div>
+                    <div style="font-size: 10px; color: var(--text-light); margin-top: 2px;">Nessuna catena</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="location-banner">
+            <span class="location-icon">📍</span>
+            <span class="location-text">Settimo Milanese Centro</span>
+            <span class="change-location">Cambia</span>
+        </div>
+
+        <!-- Explore by Category -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Esplora per categoria</h2>
+            </div>
+            <div class="categories-grid">
+                <div class="category-item" onclick="navigateTo('categories', 'ristorazione')">
+                    <div class="category-icon">🍝</div>
+                    <div class="category-name">Ristoranti</div>
+                    <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 2px;">47 locali</div>
+                </div>
+                <div class="category-item" onclick="navigateTo('categories', 'servizi')">
+                    <div class="category-icon">💇</div>
+                    <div class="category-name">Servizi</div>
+                    <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 2px;">84 attività</div>
+                </div>
+                <div class="category-item" onclick="navigateTo('categories', 'retail')">
+                    <div class="category-icon">🛍️</div>
+                    <div class="category-name">Negozi</div>
+                    <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 2px;">32 shop</div>
+                </div>
+                <div class="category-item" onclick="navigateTo('categories', 'alimentari')">
+                    <div class="category-icon">🥖</div>
+                    <div class="category-name">Alimentari</div>
+                    <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 2px;">28 botteghe</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Near You -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">📍 Vicino a te</h2>
+                <span class="see-all">Vedi tutti →</span>
+            </div>
+            <div class="cards-scroll">
+                <div class="business-card-h">
+                    <div class="card-image">
+                        🥖
+                        <span class="premium-badge">⭐ PREMIUM</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">Il Forno di Gigi</div>
+                        <div class="card-category">Dal 1932 · Panetteria</div>
+                        <div class="card-distance">📍 350m · Aperto ora</div>
+                    </div>
+                </div>
+                <div class="business-card-h">
+                    <div class="card-image">🍕</div>
+                    <div class="card-content">
+                        <div class="card-title">Pizzeria da Marco</div>
+                        <div class="card-category">Ristorante</div>
+                        <div class="card-distance">📍 420m · Aperto ora</div>
+                    </div>
+                </div>
+                <div class="business-card-h">
+                    <div class="card-image">💇</div>
+                    <div class="card-content">
+                        <div class="card-title">Romano Parrucchieri</div>
+                        <div class="card-category">Parrucchiere</div>
+                        <div class="card-distance">📍 580m · Chiuso</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Storici -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">🏛️ Attività storiche</h2>
+                <span class="see-all">Scopri →</span>
+            </div>
+            <div style="background: var(--primary-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border);">
+                <div style="font-size: 14px; font-weight: 600; color: var(--primary); margin-bottom: 8px;">
+                    Scopri i negozi con più storia
+                </div>
+                <div style="font-size: 13px; color: var(--text-light); margin-bottom: 12px;">
+                    Il Forno di Gigi dal 1932, Moroni dal 1913, Sbarbori da oltre 50 anni...
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span style="font-size: 11px; padding: 4px 10px; background: white; border-radius: 12px; color: var(--primary); font-weight: 600;">93 anni</span>
+                    <span style="font-size: 11px; padding: 4px 10px; background: white; border-radius: 12px; color: var(--primary); font-weight: 600;">112 anni</span>
+                    <span style="font-size: 11px; padding: 4px 10px; background: white; border-radius: 12px; color: var(--primary); font-weight: 600;">50+ anni</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Support Local -->
+        <div style="padding: 0 16px 24px;">
+            <div style="background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                    <div style="width: 44px; height: 44px; border-radius: 22px; background: linear-gradient(135deg, var(--primary-light), var(--primary)); display: flex; align-items: center; justify-content: center; font-size: 22px;">💚</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px;">Perché comprare locale?</div>
+                        <div style="font-size: 12px; color: var(--text-light);">Il tuo impatto sul quartiere</div>
+                    </div>
+                </div>
+                <div style="font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 12px;">
+                    Ogni euro speso in un negozio locale genera <strong style="color: var(--primary);">3x più valore</strong> per Settimo Milanese rispetto alle catene nazionali.
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <div style="flex: 1; background: var(--primary-bg); padding: 10px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 18px; font-weight: 700; color: var(--primary);">68%</div>
+                        <div style="font-size: 10px; color: var(--text-light); font-weight: 600;">Resta qui</div>
+                    </div>
+                    <div style="flex: 1; background: #FFF3E0; padding: 10px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 18px; font-weight: 700; color: #F57C00;">10%</div>
+                        <div style="font-size: 10px; color: var(--text-light); font-weight: 600;">Con catene</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">⭐ Più cercati</h2>
+                <span class="see-all">Vedi tutti →</span>
+            </div>
+            <div class="business-list">
+                <div class="business-card-v">
+                    <div class="card-icon">🥖</div>
+                    <div class="card-info">
+                        <div class="card-title">Il Forno di Gigi</div>
+                        <div class="card-category">Dal 1932 · Panetteria</div>
+                        <div class="card-meta">
+                            <span class="meta-item">📍 350m</span>
+                            <span class="meta-item">⭐ Premium</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="business-card-v">
+                    <div class="card-icon">🔧</div>
+                    <div class="card-info">
+                        <div class="card-title">Ferramenta Magrefer</div>
+                        <div class="card-category">Ferramenta</div>
+                        <div class="card-meta">
+                            <span class="meta-item">📍 1.2km</span>
+                            <span class="meta-item">⭐ Premium</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="business-card-v">
+                    <div class="card-icon">💍</div>
+                    <div class="card-info">
+                        <div class="card-title">Sbarbori Gioielli</div>
+                        <div class="card-category">Oltre 50 anni · Gioielleria</div>
+                        <div class="card-meta">
+                            <span class="meta-item">📍 800m</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Box -->
+        <div class="section">
+            <div style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 16px; padding: 24px; text-align: center; color: white;">
+                <div style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Hai un negozio?</div>
+                <div style="font-size: 14px; opacity: 0.95; margin-bottom: 16px;">
+                    Entra gratis su Settimo Hub.<br>Fatti trovare dai tuoi clienti.
+                </div>
+                <button style="background: white; color: var(--primary); padding: 12px 24px; border-radius: 24px; border: none; font-weight: 700; font-size: 14px; cursor: pointer;">
+                    Scopri di più →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CATEGORIES PAGE -->
+    <div class="page" id="categoriesPage">
+        <div class="section">
+            <h2 class="section-title">Tutte le categorie</h2>
+            <div class="business-list" style="margin-top: 16px;">
+                <!-- Will be populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- USEFUL LINKS PAGE -->
+    <div class="page" id="linksPage">
+        <div class="section">
+            <h2 class="section-title">🔗 Link Utili</h2>
+            <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">Servizi essenziali per Settimo Milanese</p>
+            
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--primary);">🏛️ Comune</h3>
+                <div class="business-list">
+                    <a href="https://comune.settimomilanese.mi.it/" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">🏛️</div>
+                            <div class="card-info">
+                                <div class="card-title">Comune di Settimo Milanese</div>
+                                <div class="card-category">Sito ufficiale, servizi online</div>
+                                <div class="card-meta">
+                                    <span class="meta-item">📞 02 335091</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="https://comune.settimomilanese.mi.it/servizi/" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">📋</div>
+                            <div class="card-info">
+                                <div class="card-title">Servizi Comunali Online</div>
+                                <div class="card-category">Certificati, SPID, appuntamenti</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--primary);">🚨 Emergenze</h3>
+                <div class="business-list">
+                    <a href="tel:118" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">🚑</div>
+                            <div class="card-info">
+                                <div class="card-title">Emergenza Sanitaria</div>
+                                <div class="card-category">Ambulanza</div>
+                                <div class="card-meta">
+                                    <span class="meta-item" style="color: #e74c3c; font-weight: 700;">📞 118</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="tel:112" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">👮</div>
+                            <div class="card-info">
+                                <div class="card-title">Carabinieri Pronto Intervento</div>
+                                <div class="card-category">Emergenze</div>
+                                <div class="card-meta">
+                                    <span class="meta-item" style="color: #e74c3c; font-weight: 700;">📞 112</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="tel:115" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">🚒</div>
+                            <div class="card-info">
+                                <div class="card-title">Vigili del Fuoco</div>
+                                <div class="card-category">Emergenze incendi</div>
+                                <div class="card-meta">
+                                    <span class="meta-item" style="color: #e74c3c; font-weight: 700;">📞 115</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="tel:0233509329" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">🚔</div>
+                            <div class="card-info">
+                                <div class="card-title">Polizia Locale Settimo</div>
+                                <div class="card-category">Vigili urbani</div>
+                                <div class="card-meta">
+                                    <span class="meta-item">📞 02 33509329</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--primary);">🏥 Sanità</h3>
+                <div class="business-list">
+                    <a href="tel:800103103" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">⚕️</div>
+                            <div class="card-info">
+                                <div class="card-title">Guardia Medica Rho</div>
+                                <div class="card-category">Emergenze mediche non gravi</div>
+                                <div class="card-meta">
+                                    <span class="meta-item">📞 800 103103</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="https://multimedica.it/strutture/irccs-sesto-san-giovanni/" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">🏥</div>
+                            <div class="card-info">
+                                <div class="card-title">Ospedale MultiMedica Sesto</div>
+                                <div class="card-category">Pronto Soccorso, DEA</div>
+                                <div class="card-meta">
+                                    <span class="meta-item">📍 Via Milanese 300, Sesto</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="business-card-v">
+                        <div class="card-icon">💊</div>
+                        <div class="card-info">
+                            <div class="card-title">Farmacie di Turno</div>
+                            <div class="card-category">Verifica online le farmacie aperte</div>
+                            <div class="card-meta">
+                                <span class="meta-item">🌐 Cerca su Google</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--primary);">🚍 Trasporti</h3>
+                <div class="business-list">
+                    <a href="https://www.atm.it" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">🚇</div>
+                            <div class="card-info">
+                                <div class="card-title">ATM Milano</div>
+                                <div class="card-category">Orari metro, bus, tram</div>
+                                <div class="card-meta">
+                                    <span class="meta-item">🚌 Linee che servono Settimo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="https://www.trenord.it" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">🚆</div>
+                            <div class="card-info">
+                                <div class="card-title">Trenord</div>
+                                <div class="card-category">Treni regionali e suburbani</div>
+                                <div class="card-meta">
+                                    <span class="meta-item">📍 Stazione più vicina: Rho</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--primary);">♻️ Rifiuti</h3>
+                <div class="business-list">
+                    <div class="business-card-v">
+                        <div class="card-icon">🗑️</div>
+                        <div class="card-info">
+                            <div class="card-title">Mantova Ambiente</div>
+                            <div class="card-category">Raccolta rifiuti, centro raccolta</div>
+                            <div class="card-meta">
+                                <span class="meta-item">📍 Via Keplero (CdR)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--primary);">📚 Cultura</h3>
+                <div class="business-list">
+                    <a href="tel:0233509272" style="text-decoration: none; color: inherit;">
+                        <div class="business-card-v">
+                            <div class="card-icon">📚</div>
+                            <div class="card-info">
+                                <div class="card-title">Biblioteca Comunale</div>
+                                <div class="card-category">Via Grandi</div>
+                                <div class="card-meta">
+                                    <span class="meta-item">📞 02 33509272-3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- BLOG PAGE -->
+    <div class="page" id="blogPage">
+        <div class="section">
+            <h2 class="section-title">📰 Blog Locale</h2>
+            <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">Storie, interviste e curiosità dal commercio di Settimo</p>
+            
+            <div class="business-list">
+                <div class="business-card-v">
+                    <div class="card-icon">🏛️</div>
+                    <div class="card-info">
+                        <div class="card-title">5 Negozi Storici di Settimo</div>
+                        <div class="card-category">Scopri le attività che da generazioni servono il nostro quartiere...</div>
+                        <div class="card-meta">
+                            <span class="meta-item">📅 15 ott 2025</span>
+                            <span class="meta-item">⏱️ 5 min</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="business-card-v">
+                    <div class="card-icon">💚</div>
+                    <div class="card-info">
+                        <div class="card-title">Perché Comprare Locale</div>
+                        <div class="card-category">Non è solo ideologia, ma economia reale per il quartiere...</div>
+                        <div class="card-meta">
+                            <span class="meta-item">📅 10 ott 2025</span>
+                            <span class="meta-item">⏱️ 4 min</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="business-card-v">
+                    <div class="card-icon">🥖</div>
+                    <div class="card-info">
+                        <div class="card-title">Intervista: Il Forno di Gigi</div>
+                        <div class="card-category">93 anni di storia raccontati dalla terza generazione...</div>
+                        <div class="card-meta">
+                            <span class="meta-item">📅 5 ott 2025</span>
+                            <span class="meta-item">⏱️ 8 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="business-card-v">
+                    <div class="card-icon">💍</div>
+                    <div class="card-info">
+                        <div class="card-title">Sbarbori: 3 Generazioni di Orafi</div>
+                        <div class="card-category">Oltre 50 anni di artigianato locale e tradizione familiare...</div>
+                        <div class="card-meta">
+                            <span class="meta-item">📅 28 set 2025</span>
+                            <span class="meta-item">⏱️ 6 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="business-card-v">
+                    <div class="card-icon">🌱</div>
+                    <div class="card-info">
+                        <div class="card-title">Come Nasce Settimo Hub</div>
+                        <div class="card-category">Il progetto per salvare il commercio locale dal digitale...</div>
+                        <div class="card-meta">
+                            <span class="meta-item">📅 20 set 2025</span>
+                            <span class="meta-item">⏱️ 7 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAB -->
+    <button class="fab" onclick="alert('Filtra per mappa')">🗺️</button>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="changePage('home')">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" onclick="changePage('categories')">
+            <span class="nav-icon">📁</span>
+            <span class="nav-label">Categorie</span>
+        </button>
+        <button class="nav-item" onclick="changePage('links')">
+            <span class="nav-icon">🔗</span>
+            <span class="nav-label">Link Utili</span>
+        </button>
+        <button class="nav-item" onclick="changePage('blog')">
+            <span class="nav-icon">📰</span>
+            <span class="nav-label">Blog</span>
+        </button>
+    </div>
+
+    <script>
+        // State
+        let currentPage = 'home';
+        let currentFilter = 'all';
+
+        // Navigation
+        function changePage(page) {
+            currentPage = page;
+            
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(page + 'Page').classList.add('active');
+            
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function navigateTo(page, category) {
+            if (category) {
+                currentFilter = category;
+                updateFilterChips();
+            }
+            changePage(page);
+        }
+
+        // Filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.category;
+                // Filter logic here
+            });
+        });
+
+        function updateFilterChips() {
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.category === currentFilter);
+            });
+        }
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            // Search logic here
+            console.log('Searching for:', term);
+        });
+
+        // PWA - Add to homescreen
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Show install button if needed
+        });
+    </script>
+</body>
+</html>
