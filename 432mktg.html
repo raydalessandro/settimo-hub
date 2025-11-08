@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <title>EAR 7D — Proiezione Testo in Browser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/dist/transformers.min.js"></script>
+  <style>
+    .card { @apply bg-white/70 backdrop-blur rounded-2xl shadow p-5; }
+    .muted { color: #6b7280; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 text-slate-800">
+  <div class="max-w-5xl mx-auto p-6 md:p-10 space-y-6">
+    <header class="flex items-center justify-between">
+      <h1 class="text-2xl md:text-3xl font-extrabold">EAR 7D — Proiezione Testo</h1>
+      <span class="text-sm muted">Local • No server</span>
+    </header>
+
+    <section class="card space-y-4">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="font-semibold">Testo da analizzare</label>
+          <textarea id="inputText" class="w-full h-40 p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300" placeholder="Scrivi o incolla qui la descrizione aziendale..."></textarea>
+          <div class="flex items-center gap-3">
+            <label class="font-semibold">Temperatura</label>
+            <input id="temp" type="range" min="0.2" max="1.2" step="0.05" value="0.6" class="w-40">
+            <span id="tempVal" class="tabular-nums">0.60</span>
+          </div>
+          <button id="btnProject" class="px-4 py-2 rounded-xl bg-slate-900 text-white hover:opacity-90">
+            Proietta in 7D
+          </button>
+          <span id="status" class="ml-3 text-sm muted">Modello: in caricamento…</span>
+        </div>
+
+        <div class="space-y-2">
+          <label class="font-semibold">Vocabolario (opzionale, per Top-5 simboli)</label>
+          <input id="jsonFile" type="file" accept=".json" class="block w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-slate-900 file:text-white hover:file:opacity-90" />
+          <p class="text-sm muted">
+            Carica <span class="mono">ear_vocabulary_7d.json</span> (quello che ti ho generato) per calcolare la similarità con i simboli.
+          </p>
+          <div id="jsonInfo" class="text-sm muted"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid md:grid-cols-2 gap-6">
+      <div class="card space-y-3">
+        <h2 class="font-bold text-lg">Pesi 7D</h2>
+        <div class="text-sm muted">Distribuzione (softmax) sulle 7 dimensioni dei Nodi.</div>
+        <canvas id="radar" height="260"></canvas>
+        <div id="scores" class="text-sm pt-2 grid grid-cols-1 gap-1"></div>
+      </div>
+
+      <div class="card space-y-3">
+        <h2 class="font-bold text-lg">Top-5 Simboli Affini</h2>
+        <div class="text-sm muted">Richiede il JSON del vocabolario. Mostra affinità (coseno) con il vettore proiettato.</div>
+        <ul id="topSymbols" class="text-sm space-y-2"></ul>
+      </div>
+    </section>
+
+    <footer class="text-xs muted text-center py-6">
+      EAR 7D — browser demo • Modello: Xenova/all-MiniLM-L6-v2 (transformers.js)
+    </footer>
+  </div>
+
+  <script>
+    // ----- Config: Anchors semantiche (Italiano, business-friendly) -----
+    const NODE_ANCHORS = {
+      "Mentalismo (∇₀)": [
+        "visione chiara", "idea guida", "intenzione consapevole", "valori fondanti", "scopo dell'azienda"
+      ],
+      "Corrispondenza (◎)": [
+        "coerenza interna-esterna", "allineamento tra promessa e realtà", "feedback del mercato", "reputazione coerente"
+      ],
+      "Vibrazione (⟡)": [
+        "stile riconoscibile", "tono di voce stabile", "identità di brand costante", "ritmo comunicativo"
+      ],
+      "Polarità (⟷)": [
+        "tradizione e innovazione", "qualità e prezzo", "velocità e precisione", "artigianalità e tecnologia"
+      ],
+      "Ritmo/Tempo (⟐)": [
+        "storia nel tempo", "cicli stagionali", "pianificazione a lungo termine", "costanza nel pubblicare"
+      ],
+      "Causa-Effetto (⦿)": [
+        "prove concrete", "casi studio", "risultati misurabili", "cause e risultati documentati"
+      ],
+      "Genere/Vuoto (∅)": [
+        "cosa non facciamo", "spazio per crescere", "priorità chiare", "focus e rinunce strategiche"
+      ]
+    };
+    const DIM_NAMES = Object.keys(NODE_ANCHORS);
+
+    // ----- Stato globale -----
+    let pipeline = null;
+    let modelReady = false;
+    let anchorEmb = null;        // Float32Array[N_anchors, D]
+    let anchorDimIdx = null;     // Int32Array[N_anchors] -> indice dimensione (0..6)
+    let vocab = null;            // JSON caricato: { symbols: [...], matrix_raw: [[...7]...] }
+    let radarChart = null;
+
+    // ----- Helpers -----
+    const softmax = (arr, temperature=1.0) => {
+      const a = arr.map(v => v / Math.max(1e-6, temperature));
+      const max = Math.max(...a);
+      const exps = a.map(v => Math.exp(v - max));
+      const sum = exps.reduce((s, v) => s + v, 0);
+      return exps.map(v => v / (sum || 1));
+    };
+
+    const l2norm = (v) => {
+      let s = 0;
+      for (let i=0;i<v.length;i++) s += v[i]*v[i];
+      const n = Math.sqrt(s) || 1;
+      return v.map(x => x / n);
+    };
+
+    const cosine = (a, b) => {
+      let dp=0, na=0, nb=0;
+      for (let i=0;i<a.length;i++){
+        dp += a[i]*b[i];
+        na += a[i]*a[i];
+        nb += b[i]*b[i];
+      }
+      return dp / (Math.sqrt(na)*Math.sqrt(nb) || 1);
+    };
+
+    // ----- UI Refs -----
+    const elText = document.getElementById('inputText');
+    const elTemp = document.getElementById('temp');
+    const elTempVal = document.getElementById('tempVal');
+    const elBtn = document.getElementById('btnProject');
+    const elStatus = document.getElementById('status');
+    const elJsonFile = document.getElementById('jsonFile');
+    const elJsonInfo = document.getElementById('jsonInfo');
+    const elScores = document.getElementById('scores');
+    const elTop = document.getElementById('topSymbols');
+
+    elTemp.addEventListener('input', () => {
+      elTempVal.textContent = Number(elTemp.value).toFixed(2);
+    });
+
+    // ----- Modello & Encoder -----
+    async function loadModel() {
+      elStatus.textContent = 'Scarico modello…';
+      pipeline = await window.transformers.pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
+        progress_callback: (p) => {
+          // *** FIX 1: Il callback 'p' è un oggetto, non un numero. ***
+          if (p.status === 'progress') {
+            const progress = Math.round(p.progress);
+            elStatus.textContent = `Caricamento: ${p.file} (${progress}%)`;
+          } else {
+            elStatus.textContent = `Stato: ${p.status}`;
+          }
+        }
+      });
+      modelReady = true;
+      elStatus.textContent = 'Modello caricato ✔';
+    }
+
+    // Encode testo -> embedding (L2-normalized)
+    async function encode(text) {
+      // Questo gestisce un *singolo* testo
+      const output = await pipeline(text, { pooling: 'mean', normalize: true });
+      // output.data: Float32Array
+      return Array.from(output.data);
+    }
+
+    // Precalcola le ancore
+    async function computeAnchorEmbeddings() {
+      const texts = [];
+      const dims = [];
+      DIM_NAMES.forEach((dim, di) => {
+        NODE_ANCHORS[dim].forEach(phrase => {
+          texts.push(phrase);
+          dims.push(di);
+        });
+      });
+      
+      const batchSize = 8;
+      const allEmbeddings = []; // L'array finale di tutti gli embedding
+      
+      for (let i = 0; i < texts.length; i += batchSize) {
+        const batch = texts.slice(i, i + batchSize);
+        
+        // *** FIX 2: La libreria restituisce un *singolo* Tensor in batch. ***
+        // 'out' è un Tensor con dimensioni [batch.length, embedding_dim]
+        const out = await pipeline(batch, { pooling: 'mean', normalize: true });
+        
+        const embeddingDim = out.dims[1]; // Es. 384
+        const data = out.data; // Questo è un Float32Array piatto [emb1, emb2, ...]
+        
+        // Dobbiamo "affettare" manualmente l'array piatto
+        for (let j = 0; j < batch.length; j++) {
+          const start = j * embeddingDim;
+          const end = start + embeddingDim;
+          // Estrai l'embedding per questo elemento del batch
+          const embedding = Array.from(data.slice(start, end));
+          allEmbeddings.push(embedding);
+        }
+        
+        elStatus.textContent = `Ancore: ${Math.min(texts.length, i + batchSize)}/${texts.length}`;
+      }
+      
+      anchorEmb = allEmbeddings; // Ora è un Array<Array<number>> corretto
+      anchorDimIdx = Int32Array.from(dims);
+      elStatus.textContent = 'Ancore pronte ✔';
+    }
+
+    // ----- Proiezione 7D -----
+    async function project7D(text, temperature=0.6) {
+      if (!modelReady || !anchorEmb) return null;
+      const vec = await encode(text);
+      // Similarità con ogni ancora
+      const sims = anchorEmb.map(a => cosine(a, vec));
+      // Media per dimensione
+      const dimScores = new Array(DIM_NAMES.length).fill(0);
+      const dimCounts = new Array(DIM_NAMES.length).fill(0);
+      for (let i=0; i<sims.length; i++) {
+        const d = anchorDimIdx[i];
+        dimScores[d] += sims[i];
+        dimCounts[d] += 1;
+      }
+      for (let d=0; d<DIM_NAMES.length; d++) {
+        dimScores[d] = dimCounts[d] ? (dimScores[d] / dimCounts[d]) : 0;
+      }
+      // Softmax → pesi in [0,1]
+      const weights = softmax(dimScores, temperature);
+      return weights;
+    }
+
+    // ----- Similarità con simboli (dal JSON) -----
+    function topSymbols(vec7) {
+      if (!vocab || !vocab.matrix_raw || !vocab.symbols) return [];
+      const syms = vocab.symbols;
+      const M = vocab.matrix_raw;  // array of [7]
+      const v = l2norm(vec7);
+      const scored = M.map((row, i) => {
+        const s = cosine(l2norm(row), v);
+        // Assicurati che il simbolo esista a questo indice
+        const symbol = syms[i] || { name: 'Sconosciuto', glyph: '?' };
+        return { i, score: s, name: symbol.name, glyph: symbol.glyph };
+      });
+      scored.sort((a,b)=> b.score - a.score);
+      return scored.slice(0, 5);
+    }
+
+    // ----- Render -----
+    function renderRadar(weights) {
+      const data = {
+        labels: DIM_NAMES,
+        datasets: [{
+          label: 'Pesi 7D',
+          data: weights,
+          fill: true,
+          backgroundColor: 'rgba(200, 100, 100, 0.2)', // Tocco di Rubedo
+          borderColor: 'rgba(200, 0, 0, 0.8)',
+          pointBackgroundColor: 'rgba(200, 0, 0, 0.8)'
+        }]
+      };
+      const options = {
+        responsive: true,
+        scales: { r: { suggestedMin: 0, suggestedMax: 1 } },
+        plugins: { legend: { display: false } }
+      };
+      if (radarChart) radarChart.destroy();
+      radarChart = new Chart(document.getElementById('radar'), { type: 'radar', data, options });
+    }
+
+    function renderScores(weights) {
+      elScores.innerHTML = '';
+      DIM_NAMES.forEach((name, idx) => {
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between";
+        row.innerHTML = `<span>${name}</span><span class="mono">${weights[idx].toFixed(3)}</span>`;
+        elScores.appendChild(row);
+      });
+    }
+
+    function renderTop(list) {
+      elTop.innerHTML = '';
+      if (!list.length) {
+        elTop.innerHTML = '<li class="muted">Carica prima il JSON del vocabolario per vedere i simboli affini.</li>';
+        return;
+      }
+      list.forEach(({name, glyph, score}) => {
+        const li = document.createElement('li');
+        li.className = "flex items-center justify-between bg-white/60 rounded-xl px-3 py-2";
+        li.innerHTML = `<span><span class="mono mr-2">${glyph}</span>${name}</span><span class="mono">${score.toFixed(3)}</span>`;
+        elTop.appendChild(li);
+      });
+    }
+
+    // ----- Eventi -----
+    elBtn.addEventListener('click', async () => {
+      const text = elText.value.trim();
+      if (!text) {
+        alert('Inserisci un testo da analizzare.');
+        return;
+      }
+      if (!modelReady || !anchorEmb) {
+        alert('Il modello o le ancore non sono ancora pronti. Attendi qualche secondo…');
+        return;
+      }
+      elStatus.textContent = 'Proiezione in corso…';
+      const t = Number(elTemp.value);
+      try {
+        const w = await project7D(text, t);
+        renderRadar(w);
+        renderScores(w);
+        // Similarità con simboli (se presenti)
+        const top = vocab ? topSymbols(w) : [];
+        renderTop(top);
+        elStatus.textContent = 'Fatto ✔';
+      } catch (e) {
+        console.error(e);
+        elStatus.textContent = 'Errore nella proiezione';
+      }
+    });
+
+    elJsonFile.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const text = await file.text();
+      try {
+        const data = JSON.parse(text);
+        // Validazione minimale
+        if (!data.symbols || !data.matrix_raw) throw new Error('JSON non valido.');
+        if (data.symbols.length !== data.matrix_raw.length) {
+            throw new Error(`Disallineamento dati: ${data.symbols.length} simboli e ${data.matrix_raw.length} vettori.`);
+        }
+        vocab = data;
+        elJsonInfo.textContent = `Caricato: ${file.name} • simboli: ${data.symbols.length}`;
+      } catch (err) {
+        vocab = null;
+        elJsonInfo.textContent = `Errore nel JSON: ${err.message}`;
+      }
+    });
+
+    // ----- Bootstrap -----
+    (async () => {
+      await loadModel();
+      await computeAnchorEmbeddings();
+    })();
+  </script>
+</body>
+</html>
